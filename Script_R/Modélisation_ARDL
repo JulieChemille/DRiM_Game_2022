@@ -1,0 +1,78 @@
+library(dynamac)
+library(readxl)
+library(ARDL)
+library(mse)
+
+setwd("C:/Users/alexa/OneDrive/Bureau/M2_EKAP/drim_game/Paris/finale")
+
+tot_less_diff <- read_excel("tot_less_diff.xlsx")
+chr2_less_diff <- read_excel("chr2_less_diff.xlsx")
+chr8_less_diff <- read_excel("chr8_less_diff.xlsx")
+
+tot_train <- tot_less_diff[-c(25:33),]
+chr2_train <- chr2_less_diff[-c(25:33),]
+chr8_train <- chr8_less_diff[-c(25:33),]
+
+tot_test <- tot_less_diff[c(25:33)]
+chr2_test <- chr2_less_diff[c(25:33)]
+chr8_test <- chr8_less_diff[c(25:33)]
+
+#ARDL
+
+#TOT
+#Variables selectionnes 
+
+library(dynlm)
+
+x <- lm(formula = DR ~ p25_7 + median_3  + p10_2 + 
+          p10_3 + tx_retournement + p90_8 + p90_5 + p75_7 + 
+            p90_3 + p95_2 
+        , data = tot_train)
+summary(x)
+
+#on enleve les variables significatives en enlevant la variable avec p-value la + elevee 
+AIC_selection <- auto_ardl(data = tot_train, max_order = 1, selection = "AIC",
+                           formula = DR ~   p25_7   
+                             )
+summary(AIC_selection)
+summary(AIC_selection$best_model)
+#pas de modele 
+
+
+#Chr2
+y2 <- lm(formula = DR ~   mean_5 + p95_7 +  
+            p90_4 + p10_2 + mean_4 + moral_fr + 
+           p90_5  + p25_5 + p75_2 + CD_MOD_HABI_1 + median_7
+          , data = chr2_train)
+summary(y2)
+
+#on enleve les variables significatives en enlevant la variable avec p-value la + elevee 
+AIC_selection <- auto_ardl(data = chr2_train, max_order = 1, selection = "AIC",
+                           formula = DR ~  
+                              p25_5  
+                               )
+summary(AIC_selection)
+AIC_selection$top_orders
+summary(AIC_selection$best_model)
+#pas de modele selectionne 
+
+
+#chr8
+x3 <- lm(formula = DR ~  CD_PROF_2 + mean_7 + p25_6 + 
+     CD_TY_CLI_RCI_2 + CD_ETA_CIV_1 + p25_1   + CD_PROF_3 + 
+      PIB + median_3 + p5_6 + tx_endet + 
+       p25_4, 
+   data = chr8_less_diff)
+summary(x3)
+
+#on enleve les variables significatives en enlevant la variable avec p-value la + elevee 
+AIC_selection <- auto_ardl(data = chr8_less_diff, max_order = 1, selection = "AIC",
+                           formula = DR ~  
+                              CD_ETA_CIV_1 
+                              )
+summary(AIC_selection)
+AIC_selection$top_orders
+summary(AIC_selection$best_model)
+
+# pas de modele trouve avec toutes les variables significatives
+
