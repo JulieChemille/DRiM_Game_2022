@@ -4,4 +4,3 @@ L'ensemble des codes et des documents nécessaires pour le DRIM Game 2022 se tro
 
 Le sujet est le suivant : "Prévision des taux de passage en défaut à partir d'un portefeuille de "crédits automobiles" destinés à une clientèle de détail française."
 
-Nous avons obtenu la première place !
